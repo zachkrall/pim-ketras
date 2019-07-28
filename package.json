@@ -7,10 +7,18 @@
   "description": "A simple Node app built on Express, instantly up and running.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "webpack && node server.js"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "css-loader": "^3.1.0",
+    "express": "^4.16.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.38.0",
+    "webpack-cli": "^3.3.6"
   },
   "engines": {
     "node": "8.x"
