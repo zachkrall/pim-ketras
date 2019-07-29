@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import p5 from 'p5';
+import * as ml5 from 'ml5';
 
 export default class App extends React.Component{
   
@@ -12,19 +13,19 @@ export default class App extends React.Component{
     
     const sketch = (p) =>{
     
-      const setup = p => {
-        p.createCanvas(400,400);
-        p.background(0);
+      p.setup = () => {
+        
       }
 
-      const draw = p => {
-        p.fill(255,0,0);
-        p.rect(10,10,10,10);
+      p.draw = () => {
+        
       }
     
     }
     
     const p5sketch = new p5(sketch);
+    
+    console.log('ml5 version: ', ml5.version);
     
     return (
       <h1>Hello, World! :(</h1>

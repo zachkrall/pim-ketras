@@ -1,5 +1,6 @@
 dependencies:
   express: 4.16.4
+  ml5: 1.0.0
   p5: 0.9.0
   react: 16.8.6
   react-dom: 16.8.6
@@ -4136,6 +4137,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
+  /ml5/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha512-5ey0eIeGHF5DdgFhXnr36JDJMDmjRD8FY3QLpVzZbwYEGnHdTIy5YjqhBOEv917Eyf/RKAbOnWSYNnX3aV1a/Q==
   /move-concurrently/1.0.1:
     dependencies:
       aproba: 1.2.0
@@ -6141,6 +6146,7 @@ specifiers:
   css-loader: ^3.1.0
   dotenv: ^8.0.0
   express: ^4.16.4
+  ml5: ^1.0.0
   p5: ^0.9.0
   react: ^16.8.6
   react-dom: ^16.8.6
