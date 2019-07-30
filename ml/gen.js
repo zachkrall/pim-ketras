@@ -74,19 +74,22 @@ export async function gen() {
 
     let result = '';
 
-    // (async () => {
+    (async () => {
 //   const args = parseArgs();
 
 //   if (args.gpu) {
 //     console.log('Using GPU');
 //     require('@tensorflow/tfjs-node-gpu');
 //   } else {
-    console.log('Using CPU');
+    // console.log('Using CPU');
     require('@tensorflow/tfjs-node');
 //   }
 
+      // console.log('model:');
   // Load the model.
   const model = await tf.loadLayersModel(handler);
+
+  // console.log(model);
 
   const sampleLen = model.inputs[0].shape[1];
 
@@ -100,16 +103,18 @@ export async function gen() {
 
   // Get a seed text from the text data object.
   const [seed, seedIndices] = textData.getRandomSlice();
+  console.log('seed indices: ', seedIndices);
+  console.log('seed: ', seed);
   
 //   console.log(`Seed text:\n"${seed}"\n`);
 
   const generated = await generateText(
       model, textData, seedIndices, 600, 0.35);
 
-
+  // console.log(generated);
   return `\n${generated}\nWoo-ah!`;
 
 //   result = `\n${generated}\nWoo-ah!`;
-//   })();
+  })();
 }
-// gen();
+gen();

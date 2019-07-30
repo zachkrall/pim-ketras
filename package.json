@@ -4,21 +4,21 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "npm run build && node server.js",
-    "dev": "onchange './src/*.js' -- npm start",
+    "start": "npm run build && babel-node server.js",
     "build": "webpack",
     "train": "babel-node ./ml/train.js"
   },
   "dependencies": {
+    "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@tensorflow/tfjs": "^1.2.5",
-    "@tensorflow/tfjs-core": "^1.2.6",
+    "@tensorflow/tfjs-core": "^1.2.5",
     "@tensorflow/tfjs-node": "^1.2.5",
     "@tensorflow/tfjs-node-gpu": "^1.2.5",
     "argparse": "^1.0.10",
-    "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.1.0",
     "express": "^4.17.1",
@@ -27,7 +27,6 @@
     "style-loader": "^0.23.1"
   },
   "devDependencies": {
-    "@babel/node": "^7.5.5",
     "webpack": "^4.38.0",
     "webpack-cli": "^3.3.6"
   },

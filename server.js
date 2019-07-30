@@ -14,17 +14,6 @@ app.get('/', function(request, response) {
 
 app.get('/generate', function(request, response){
 
-  gen().then(
-    (result)=>{response.json({
-      "lyrics": result.toString().replace(/\n/g,'<br/>')
-    })}
-  ).catch(
-    (err)=>{response.json({
-      "lyrics": "error: " + err
-    })}
-  )
-
-
 });
 
 const listener = app.listen(port, function() {
