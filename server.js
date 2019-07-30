@@ -1,22 +1,32 @@
-// server.js
-// where your node app starts
-
-// init project
 const express = require('express');
 const app = express();
+const port = process.env.PORT || '8080';
+const tf = require('@tensorflow/tfjs');
+const fs = require('fs');
 
-// we've started you off with Express, 
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
+const { gen } = require('./ml/gen.js');
 
-// http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
-// http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
-// listen for requests :)
-const listener = app.listen(process.env.PORT, function() {
-  console.log('Your app is listening on port ' + listener.address().port);
+app.get('/generate', function(request, response){
+
+  gen().then(
+    (result)=>{response.json({
+      "lyrics": result.toString().replace(/\n/g,'<br/>')
+    })}
+  ).catch(
+    (err)=>{response.json({
+      "lyrics": "error: " + err
+    })}
+  )
+
+
+});
+
+const listener = app.listen(port, function() {
+  console.log('Listening on port ' + listener.address().port);
 });

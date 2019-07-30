@@ -1,34 +1,71 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import p5 from 'p5';
-import * as ml5 from 'ml5';
+// import p5 from "p5";
+// import * as ml5 from "ml5";
 
 export default class App extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+      label: 'Loading... This may take a while. I have to do like... so much math rn.'
+    }
+  }
   
-  componentWillMount(){
+  componentDidMount(){
+
+    fetch('/generate',{
+      method: 'GET'
+    }).then( results => {
+      return results.json();
+    })
+    .then( data => {
+      console.log(data);
+      this.setState({label: data.lyrics});
+    });
+
   }
   
   render(){
     
-    const sketch = (p) =>{
-    
-      p.setup = () => {
-        
-      }
+    // let label,confidence;
 
-      p.draw = () => {
-        
-      }
-    
-    }
-    
-    const p5sketch = new p5(sketch);
-    
-    console.log('ml5 version: ', ml5.version);
-    
+    // const sketch = (p) => {
+
+    //   let img;
+    //   let classifier = ml5.imageClassifier('MobileNet');
+
+    //   console.log(classifier);
+
+    //   p.preload = () => {
+    //     img = p.loadImage('/lion.jpg');
+    //     console.log(img);
+    //   }
+
+    //   p.setup = () => {
+    //     classifier.classify(img, gotResult);
+    //   }
+
+    //   const gotResult = (error,results) => {
+    //     if(error){
+    //       console.error(error);
+    //     } else {
+    //       console.log(results);
+    //       label = results[0].label;
+    //       confidence = nf(results[0].confidence);
+    //     }
+    //   }
+
+    // }
+
+    // const myp5 = new p5(sketch);
+
     return (
-      <h1>Hello, World! :(</h1>
+      <>
+      <h1>Pim Ketras</h1>
+      <span dangerouslySetInnerHTML={{__html: this.state.label }}></span>
+      </>
     )
   }
   
