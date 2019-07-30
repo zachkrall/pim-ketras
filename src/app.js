@@ -1,16 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-// import p5 from "p5";
-// import * as ml5 from "ml5";
-
 export default class App extends React.Component{
 
   constructor(props){
     super(props);
     this.state = {
-      label: 'Loading... This may take a while. I have to do like... so much math rn.',
-      lyrics: ''
+      label: 'Loading...'
     }
     this.getData = this.getData.bind(this);
   }
