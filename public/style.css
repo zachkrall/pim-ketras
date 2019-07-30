@@ -13,6 +13,10 @@ body {
   margin: 2em;
 }
 
+a{
+  color:tomato;
+}
+
 h1 {
 }
 
@@ -49,12 +53,12 @@ button {
   border-radius: 3px;
   background-color: lightgrey;
   border: 1px solid grey;
-  box-shadow: 2px 2px teal;
+  box-shadow: 2px 2px grey;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: yellow;
+  background-color: lightcoral;
 }
 
 button:active {
@@ -68,5 +72,6 @@ li {
 footer {
   margin-top: 50px;
   padding-top: 25px;
-  border-top: 1px solid lightgrey;
+  border-top: 1px solid white;
+  font-size:0.8em;
 }

@@ -111,7 +111,7 @@ export async function gen() {
   const generated = await generateText(
       model, textData, seedIndices, 600, 0.35);
 
-  // console.log(generated);
+  console.log(generated);
   return `\n${generated}\nWoo-ah!`;
 
 //   result = `\n${generated}\nWoo-ah!`;

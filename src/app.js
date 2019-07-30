@@ -9,62 +9,46 @@ export default class App extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      label: 'Loading... This may take a while. I have to do like... so much math rn.'
+      label: 'Loading... This may take a while. I have to do like... so much math rn.',
+      lyrics: ''
     }
+    this.getData = this.getData.bind(this);
   }
   
-  componentDidMount(){
-
-    fetch('/generate',{
+  getData(){
+    
+    fetch('/lyrics',{
       method: 'GET'
     }).then( results => {
       return results.json();
     })
     .then( data => {
       console.log(data);
-      this.setState({label: data.lyrics});
+      this.setState({label: data.lyrics + '<br/>(Woo-ah!)'});
     });
+    
+  }
+  
+  componentDidMount(){
+
+    this.getData();
 
   }
   
   render(){
     
-    // let label,confidence;
-
-    // const sketch = (p) => {
-
-    //   let img;
-    //   let classifier = ml5.imageClassifier('MobileNet');
-
-    //   console.log(classifier);
-
-    //   p.preload = () => {
-    //     img = p.loadImage('/lion.jpg');
-    //     console.log(img);
-    //   }
-
-    //   p.setup = () => {
-    //     classifier.classify(img, gotResult);
-    //   }
-
-    //   const gotResult = (error,results) => {
-    //     if(error){
-    //       console.error(error);
-    //     } else {
-    //       console.log(results);
-    //       label = results[0].label;
-    //       confidence = nf(results[0].confidence);
-    //     }
-    //   }
-
-    // }
-
-    // const myp5 = new p5(sketch);
-
     return (
       <>
       <h1>Pim Ketras</h1>
+      <button onClick={this.getData}>Refresh</button>
+      <br/><br/>
       <span dangerouslySetInnerHTML={{__html: this.state.label }}></span>
+      
+      <footer>
+        Cached example text generated from an LSTM model using a corpus
+        of all of Kim Petras's lyrics
+        <br/>Made with Tensorflow.js by <a href="https://zachkrall.com">Zach Krall</a>
+      </footer>
       </>
     )
   }

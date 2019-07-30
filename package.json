@@ -4,9 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "npm run build && babel-node server.js",
+    "start": "webpack && babel-node server.js",
     "build": "webpack",
-    "train": "babel-node ./ml/train.js"
+    "train": "babel-node ./ml/train.js",
+    "lyrics": "babel-node ./ml/gen.js"
   },
   "dependencies": {
     "@babel/cli": "^7.5.5",
