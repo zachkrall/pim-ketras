@@ -1,0 +1,1 @@
+export { useLyricGen } from './useLyricGen'
