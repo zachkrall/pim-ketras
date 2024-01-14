@@ -30,7 +30,9 @@ import * as tfn from '@tensorflow/tfjs-node';
 import { TextData } from './data';
 import { generateText } from './model';
 
-const handler = tfn.io.fileSystem("./ml/myModel/model.json");
+const modelPath = path.resolve(__dirname, './myModel/model.json');
+
+const handler = tfn.io.fileSystem(modelPath);
 
 // function parseArgs() {
 //   const parser = argparse.ArgumentParser({
