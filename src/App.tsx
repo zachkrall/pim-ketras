@@ -7,19 +7,12 @@ import { Button } from './components/ui/button'
 import Lyrics from './components/Lyrics'
 import { Header } from './components/Header'
 import { Pencil, Plus } from 'lucide-react'
-import { ModelProvider } from './context/ModelProvider'
+import { ModelProvider, useModel } from '@/context/ModelProvider'
 import { Settings } from './components/Settings'
-import { useModel } from './hooks/useModel'
 
 const LyricsWrapper = () => {
-  const {
-    characterLimit,
-    lyrics,
-    addLyrics,
-    generateLyrics,
-    readyToGenerate,
-    status,
-  } = useModel()
+  const { lyrics, addLyrics, generateLyrics, readyToGenerate, status } =
+    useModel()
 
   return (
     <div

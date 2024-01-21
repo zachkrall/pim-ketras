@@ -79,10 +79,15 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
   // load model and corpus on init
   useEffect(() => {
     if (modelRef.current === null) {
-      tf.loadLayersModel(constants.modelPath).then((model) => {
-        modelRef.current = model
-        setModelIsLoaded(true)
-      })
+      tf.loadLayersModel(constants.modelPath)
+        .then((model) => {
+          modelRef.current = model
+          setModelIsLoaded(true)
+          console.log('model loaded')
+        })
+        .catch((e) => {
+          console.log(e)
+        })
     }
     if (corpusRef.current === null) {
       fetch(constants.corpusPath, {
@@ -209,7 +214,21 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
       corpusIsLoaded,
       modelIsLoaded,
     }),
-    []
+    [
+      backend,
+      setBackend,
+      temperature,
+      setTemperature,
+      characterLimit,
+      setCharacterLimit,
+      readyToGenerate,
+      generateLyrics,
+      addLyrics,
+      status,
+      lyrics,
+      corpusIsLoaded,
+      modelIsLoaded,
+    ]
   )
 
   return (

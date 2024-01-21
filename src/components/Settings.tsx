@@ -1,4 +1,4 @@
-import { useModel } from '@/hooks/useModel'
+import { useModel } from '@/context/ModelProvider'
 import { cn } from '@/lib/utils'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 import { Slider } from './ui/slider'

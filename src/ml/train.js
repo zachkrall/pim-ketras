@@ -25,8 +25,12 @@ import * as path from 'path';
 
 import * as argparse from 'argparse';
 
-import {TextData} from './data';
-import {createModel, compileModel, fitModel, generateText} from './model';
+import {TextData} from './data.js';
+import {createModel, compileModel, fitModel, generateText} from './model.js';
+
+import * as url from 'url';
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 function parseArgs() {
   const parser = argparse.ArgumentParser({
@@ -100,10 +104,10 @@ async function main() {
   const args = parseArgs();
   if (args.gpu) {
     console.log('Using GPU');
-    require('@tensorflow/tfjs-node-gpu');
+    await import('@tensorflow/tfjs-node-gpu');
   } else {
     console.log('Using CPU');
-    require('@tensorflow/tfjs-node');
+    await import('@tensorflow/tfjs-node');
   }
 
   // Create the text data object.
