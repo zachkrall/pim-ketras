@@ -14,6 +14,7 @@ import { generateText } from '../ml/model.js'
 import { TextData } from '../ml/data.js'
 import { useTemperature } from '../hooks/useTemperature.js'
 import { useBackend } from '../hooks/useBackend.js'
+import { WarningDialog } from '@/components/WarningDialog.js'
 
 const constants = {
   corpusPath: '/corpus.txt',
@@ -69,6 +70,8 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
   const corpusRef = useRef<string | null>(null)
   const [modelIsLoaded, setModelIsLoaded] = useState(false)
   const modelRef = useRef<tf.LayersModel | null>(null)
+
+  const [showWarning, setShowWarning] = useState(false)
 
   const readyToGenerate = [
     corpusIsLoaded,
@@ -164,6 +167,10 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
     return
   }
 
+  const openGenerateWarning = async () => {
+    setShowWarning(true)
+  }
+
   const generateLyrics: () => Promise<void> = useCallback(async () => {
     setLyrics('')
 
@@ -207,7 +214,7 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
       readyToGenerate,
 
       // lyrics
-      generateLyrics,
+      generateLyrics: openGenerateWarning,
       addLyrics,
       status,
       lyrics,
@@ -222,7 +229,7 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
       characterLimit,
       setCharacterLimit,
       readyToGenerate,
-      generateLyrics,
+      openGenerateWarning,
       addLyrics,
       status,
       lyrics,
@@ -234,6 +241,16 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ModelContext.Provider value={ctx}>
       {children}
+      <WarningDialog
+        isOpen={showWarning}
+        onCancel={() => {
+          setShowWarning(false)
+        }}
+        onConfirm={() => {
+          setShowWarning(false)
+          generateLyrics()
+        }}
+      />
     </ModelContext.Provider>
   )
 }
