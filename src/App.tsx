@@ -1,62 +1,98 @@
-import React, { FC, useState, ChangeEvent } from 'react'
+import { FC } from 'react'
 
-import { useLyricGen } from './hooks'
+import { Footer } from './components/Footer'
+import { cn } from './lib/utils'
+import { Button } from './components/ui/button'
+
+import Lyrics from './components/Lyrics'
 import { Header } from './components/Header'
+import { Pencil, Plus } from 'lucide-react'
+import { ModelProvider } from './context/ModelProvider'
+import { Settings } from './components/Settings'
+import { useModel } from './hooks/useModel'
 
-const StatusComponent = React.lazy(() => import('./components/Status'))
-const Lyrics = React.lazy(() => import('./components/Lyrics'))
-const Footer = React.lazy(() => import('./components/Footer'))
-
-const App: FC<{}> = () => {
-  const [settings, updateSettings] = useState({
-    temperature: 0.35,
-    numCharacters: 200,
-  })
-
-  const [generateLyrics, addLyrics, status, lyrics] =
-    useLyricGen(settings)
-
-  const updateVal = (e: ChangeEvent<HTMLInputElement>, val: string) => {
-    const t = e.target
-    updateSettings((prevState) => ({
-      ...prevState,
-      [val]: Number(t.value || 0),
-    }))
-  }
+const LyricsWrapper = () => {
+  const {
+    characterLimit,
+    lyrics,
+    addLyrics,
+    generateLyrics,
+    readyToGenerate,
+    status,
+  } = useModel()
 
   return (
-    <div className={'flex flex-col max-w-2xl mx-auto'}>
-      <div className={'mt-12'}>
-        <Header />
-      </div>
-
-      <div>
-        <label className={'font-mono uppercase'}>
-          {'Temperature'.toUpperCase()}
-        </label>
-        <input
-          type="range"
-          value={settings.temperature}
-          min="0.01"
-          max="0.99"
-          step="0.01"
-          onChange={(e) => updateVal(e, 'temperature')}
-        />
-        {settings.temperature.toString()}
-      </div>
-      <button onClick={generateLyrics} disabled={status !== 'Ready'}>
-        Generate
-      </button>
-
-      <StatusComponent text={status} />
-      <Lyrics text={lyrics} />
-      {lyrics.length > 0 && (
-        <button onClick={addLyrics} disabled={status !== 'Ready'}>
-          Add More Lines
-        </button>
+    <div
+      className={cn(
+        'relative',
+        'min-h-96',
+        'flex flex-col bg-white rounded-xl',
+        'p-4'
       )}
-      <Footer />
+    >
+      <Lyrics text={lyrics} />
+
+      {lyrics.length > 0 ? (
+        <div className={'pt-4'}>
+          <Button
+            variant={'default'}
+            onClick={addLyrics}
+            disabled={status !== 'Ready'}
+          >
+            {status === 'Ready' ? (
+              <div className={'flex items-center gap-2'}>
+                Keep going
+                <Pencil className={'w-4 h-4'} />
+              </div>
+            ) : (
+              <div className={'tabular-nums'}>Writing...</div>
+            )}
+          </Button>
+        </div>
+      ) : null}
+
+      {lyrics.length === 0 ? (
+        <div
+          className={
+            'absolute inset-0 flex flex-col items-center justify-center'
+          }
+        >
+          <Button
+            variant={'default'}
+            onClick={generateLyrics}
+            disabled={readyToGenerate === false}
+          >
+            <div className={'flex items-center gap-2'}>
+              Generate
+              <Plus className={'w-4 h-4'} />
+            </div>
+          </Button>
+        </div>
+      ) : null}
     </div>
+  )
+}
+
+const App: FC<{}> = () => {
+  return (
+    <ModelProvider>
+      <div
+        className={cn(
+          'min-h-[100vh]',
+          '[background-size:100%_1400px]',
+          '[background-repeat:no-repeat]',
+          '[background-position:top_center]',
+          '[background-image:radial-gradient(circle_at_50%_0%,theme("colors.pink.500")_0%,theme("colors.pink.500")_0px,theme("colors.pink.50")_80%)]'
+        )}
+      >
+        <div className={cn('flex flex-col max-w-2xl mx-auto gap-4')}>
+          <Header />
+          <Settings />
+          <LyricsWrapper />
+          <Footer />
+        </div>
+      </div>
+    </ModelProvider>
   )
 }
 

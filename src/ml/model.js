@@ -108,7 +108,7 @@ export async function fitModel(
  * @param {number} length Length of the sentence to generate.
  * @param {number} temperature Temperature value. Must be a number >= 0 and
  *   <= 1.
- * @param {(char: string) => Promise<void>} onTextGenerationChar An optinoal
+ * @param {(char: string) => Promise<void>} [onTextGenerationChar] An optinoal
  *   callback to be invoked each time a character is generated.
  * @returns {string} The generated sentence.
  */
@@ -126,37 +126,51 @@ export async function generateText(
   // Avoid overwriting the original input.
   sentenceIndices = sentenceIndices.slice()
 
-  let generated = ''
-  while (generated.length < length) {
-    // Encode the current input sequence as a one-hot Tensor.
-    const inputBuffer = new tf.TensorBuffer([1, sampleLen, charSetSize])
+  return new Promise((resolve, reject) => {
+    const generated = []
 
-    // Make the one-hot encoding of the seeding sentence.
-    for (let i = 0; i < sampleLen; ++i) {
-      inputBuffer.set(1, 0, i, sentenceIndices[i])
+    const loop = async () => {
+      // Encode the current input sequence as a one-hot Tensor.
+      const inputBuffer = new tf.TensorBuffer([
+        1,
+        sampleLen,
+        charSetSize,
+      ])
+
+      // Make the one-hot encoding of the seeding sentence.
+      for (let i = 0; i < sampleLen; ++i) {
+        inputBuffer.set(1, 0, i, sentenceIndices[i])
+      }
+      const input = inputBuffer.toTensor()
+
+      // Call model.predict() to get the probability values of the next
+      // character.
+      const output = model.predict(input)
+
+      // Sample randomly based on the probability values.
+      const winnerIndex = sample(tf.squeeze(output), temperature)
+      const winnerChar = textData.getFromCharSet(winnerIndex)
+      if (onTextGenerationChar != null) {
+        await onTextGenerationChar(winnerChar)
+      }
+
+      generated.push(winnerChar)
+      sentenceIndices = sentenceIndices.slice(1)
+      sentenceIndices.push(winnerIndex)
+
+      // Memory cleanups.
+      input.dispose()
+      output.dispose()
+
+      if (generated.length < length) {
+        window.requestAnimationFrame(loop)
+      } else {
+        resolve(generated.join(''))
+      }
     }
-    const input = inputBuffer.toTensor()
 
-    // Call model.predict() to get the probability values of the next
-    // character.
-    const output = model.predict(input)
-
-    // Sample randomly based on the probability values.
-    const winnerIndex = sample(tf.squeeze(output), temperature)
-    const winnerChar = textData.getFromCharSet(winnerIndex)
-    if (onTextGenerationChar != null) {
-      await onTextGenerationChar(winnerChar)
-    }
-
-    generated += winnerChar
-    sentenceIndices = sentenceIndices.slice(1)
-    sentenceIndices.push(winnerIndex)
-
-    // Memory cleanups.
-    input.dispose()
-    output.dispose()
-  }
-  return generated
+    loop()
+  })
 }
 
 /**

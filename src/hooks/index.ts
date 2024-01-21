@@ -1,1 +1,0 @@
-export { useLyricGen } from './useLyricGen'

@@ -1,12 +1,3 @@
-import React from 'react'
-
-const Footer = () => {
-  return (
-    <footer>
-      Created by <a href="https://zachkrall.com">Zach Krall</a> using
-      Tensorflow and React.
-    </footer>
-  )
+export const Footer = () => {
+  return <footer className={'text-center p-4'}></footer>
 }
-
-export default Footer
