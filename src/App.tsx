@@ -1,6 +1,7 @@
 import React, { FC, useState, ChangeEvent } from 'react'
 
 import { useLyricGen } from './hooks'
+import { Header } from './components/Header'
 
 const StatusComponent = React.lazy(() => import('./components/Status'))
 const Lyrics = React.lazy(() => import('./components/Lyrics'))
@@ -12,9 +13,8 @@ const App: FC<{}> = () => {
     numCharacters: 200,
   })
 
-  const [generateLyrics, addLyrics, status, lyrics] = useLyricGen(
-    settings
-  )
+  const [generateLyrics, addLyrics, status, lyrics] =
+    useLyricGen(settings)
 
   const updateVal = (e: ChangeEvent<HTMLInputElement>, val: string) => {
     const t = e.target
@@ -25,13 +25,15 @@ const App: FC<{}> = () => {
   }
 
   return (
-    <div id="container">
-      <header className="center">
-        <h1>Pim Ketras</h1>
-      </header>
+    <div className={'flex flex-col max-w-2xl mx-auto'}>
+      <div className={'mt-12'}>
+        <Header />
+      </div>
 
       <div>
-        <label>{'Temperature'.toUpperCase()}</label>
+        <label className={'font-mono uppercase'}>
+          {'Temperature'.toUpperCase()}
+        </label>
         <input
           type="range"
           value={settings.temperature}
@@ -43,7 +45,7 @@ const App: FC<{}> = () => {
         {settings.temperature.toString()}
       </div>
       <button onClick={generateLyrics} disabled={status !== 'Ready'}>
-        Start Over
+        Generate
       </button>
 
       <StatusComponent text={status} />
