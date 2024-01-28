@@ -110,6 +110,7 @@ export async function fitModel(
  *   <= 1.
  * @param {(char: string) => Promise<void>} [onTextGenerationChar] An optinoal
  *   callback to be invoked each time a character is generated.
+ * @param {AbortSignal} [signal] Optional signal for aborting the text
  * @returns {string} The generated sentence.
  */
 export async function generateText(
@@ -118,7 +119,8 @@ export async function generateText(
   sentenceIndices,
   length,
   temperature,
-  onTextGenerationChar
+  onTextGenerationChar,
+  signal
 ) {
   const sampleLen = model.inputs[0].shape[1]
   const charSetSize = model.inputs[0].shape[2]
@@ -130,6 +132,11 @@ export async function generateText(
     const generated = []
 
     const loop = async () => {
+      if (signal && signal.aborted) {
+        resolve(generated.join(''))
+        return
+      }
+
       // Encode the current input sequence as a one-hot Tensor.
       const inputBuffer = new tf.TensorBuffer([
         1,

@@ -6,13 +6,19 @@ import { Button } from './components/ui/button'
 
 import Lyrics from './components/Lyrics'
 import { Header } from './components/Header'
-import { Pencil, Plus } from 'lucide-react'
+import { Pencil, Plus, StopCircle } from 'lucide-react'
 import { ModelProvider, useModel } from '@/context/ModelProvider'
 import { Settings } from './components/Settings'
 
 const LyricsWrapper = () => {
-  const { lyrics, addLyrics, generateLyrics, readyToGenerate, status } =
-    useModel()
+  const {
+    lyrics,
+    addLyrics,
+    generateLyrics,
+    readyToGenerate,
+    cancelGeneration,
+    status,
+  } = useModel()
 
   return (
     <div
@@ -26,7 +32,7 @@ const LyricsWrapper = () => {
       <Lyrics text={lyrics} />
 
       {lyrics.length > 0 ? (
-        <div className={'pt-4'}>
+        <div className={'pt-4 flex flex-row gap-3'}>
           <Button
             variant={'default'}
             onClick={addLyrics}
@@ -41,6 +47,10 @@ const LyricsWrapper = () => {
               <div className={'tabular-nums'}>Writing...</div>
             )}
           </Button>
+
+          {status !== 'Ready' ? (
+            <Button onClick={() => cancelGeneration()}>Stop</Button>
+          ) : null}
         </div>
       ) : null}
 

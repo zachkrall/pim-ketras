@@ -73,6 +73,8 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const [showWarning, setShowWarning] = useState(false)
 
+  const abortRef = useRef<AbortController | null>(null)
+
   const readyToGenerate = [
     corpusIsLoaded,
     modelIsLoaded,
@@ -109,6 +111,8 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
     onStatusChange: ((...e: any) => any) | null = null,
     onChar: (char: string) => void
   ) => {
+    abortRef.current = new AbortController()
+
     if (modelRef.current === null) {
       return
     }
@@ -161,7 +165,8 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
       async (char) => {
         console.log({ char })
         onChar(char)
-      }
+      },
+      abortRef.current.signal
     )
 
     return
@@ -196,6 +201,12 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
     setStatus('Ready')
   }, [lyrics, temperature])
 
+  const cancelGeneration = () => {
+    if (abortRef.current) {
+      abortRef.current.abort()
+    }
+  }
+
   const ctx = useMemo(
     () => ({
       // backend
@@ -215,6 +226,7 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
 
       // lyrics
       generateLyrics: openGenerateWarning,
+      cancelGeneration,
       addLyrics,
       status,
       lyrics,
@@ -230,6 +242,8 @@ export const ModelProvider: FC<PropsWithChildren> = ({ children }) => {
       setCharacterLimit,
       readyToGenerate,
       openGenerateWarning,
+      cancelGeneration,
+      generateLyrics,
       addLyrics,
       status,
       lyrics,
